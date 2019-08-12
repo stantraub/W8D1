@@ -3,16 +3,20 @@ class PostsController < ApplicationController
   
   def new
     @post = Post.new
+    # @subs = Sub.all
   end
 
   def create
     @post = Post.new(post_params)
-    if @post.save
-
+    @post.user_id = current_user.id
+    if @post.save 
+        redirect_to post_url(@post)
     else
-      flash[:errors] = @post.errors.full_messages
-      render :new
+        flash.now[:errors] = @post.errors.full_messages
+        render :new
     end
+  
+ 
   end
 
   def edit
@@ -45,6 +49,6 @@ class PostsController < ApplicationController
 
   private
   def post_params
-    params.require(:post).permit(:title, :url, :content, :sub_ids)
+    params.require(:post).permit(:title, :url, :content, sub_ids: [])
   end
 end

@@ -7,8 +7,10 @@ class SubsController < ApplicationController
 
   def create
     @sub = Sub.new(sub_params)
-    if @sub.save
+    @sub.user_id = current_user.id 
 
+    if @sub.save
+      redirect_to sub_url(@sub) 
     else
       flash[:errors] = @sub.errors.full_messages
       render :new
@@ -25,7 +27,7 @@ class SubsController < ApplicationController
       redirect_to sub_url(@sub)
     else
       flash[:errors] = @sub.errors.full_messages
-      redirect_to edit_sub_url
+      redirect_to edit_sub_url(@sub)
     end
   end
 
